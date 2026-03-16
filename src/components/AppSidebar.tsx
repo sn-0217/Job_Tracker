@@ -1,4 +1,4 @@
-import { Briefcase, Archive, Gift, Star, Filter } from "lucide-react";
+import { Briefcase, Archive, Gift, Star, Filter, BarChart3 } from "lucide-react";
 import type { ApplicationStatus } from "@/types/job";
 
 interface SidebarProps {
