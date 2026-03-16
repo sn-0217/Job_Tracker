@@ -6,6 +6,8 @@ interface SidebarProps {
   setStatusFilter: (s: ApplicationStatus | "all") => void;
   showArchived: boolean;
   setShowArchived: (v: boolean) => void;
+  showAnalytics: boolean;
+  onShowAnalytics: () => void;
   stats: {
     total: number;
     applied: number;
