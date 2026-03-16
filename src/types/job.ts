@@ -15,6 +15,7 @@ export interface JobApplication {
   id: string;
   jobTitle: string;
   company: string;
+  companyEmail?: string;
   jobPostingUrl?: string;
   jobSource?: JobSource;
   workLocation?: WorkLocation;

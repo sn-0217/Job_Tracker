@@ -6,8 +6,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { JobApplication, JobSource } from "@/types/job";
+import { isPast, parseISO } from "date-fns";
 import { motion } from "framer-motion";
-import { ExternalLink, MapPin, MoreHorizontal } from "lucide-react";
+import { ExternalLink, Mail, MapPin, MoreHorizontal } from "lucide-react";
 import { PulseIndicator } from "./PulseIndicator";
 import { StatusBadge } from "./StatusBadge";
 
@@ -153,9 +154,12 @@ export function JobTable({ applications, onSelect, onDelete, onArchive }: JobTab
             <div><StatusBadge status={app.status} /></div>
 
             {/* Date */}
-            <div className="flex items-center gap-1.5 text-[12px] tabular-nums text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-[12px] tabular-nums text-muted-foreground relative">
               <PulseIndicator lastActivityDate={app.dateUpdated} />
               {formatDate(app.dateApplied)}
+              {app.followUpDate && isPast(parseISO(app.followUpDate)) && !["rejected", "offer"].includes(app.status) && (
+                <div title={`Follow-up was due on ${formatDate(app.followUpDate)}`} className="absolute -left-2 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+              )}
             </div>
 
             {/* CTC */}
@@ -186,6 +190,18 @@ export function JobTable({ applications, onSelect, onDelete, onArchive }: JobTab
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem onClick={() => onSelect(app)}>Edit</DropdownMenuItem>
+                  {app.companyEmail && (
+                    <DropdownMenuItem
+                      onClick={() => {
+                        const subject = encodeURIComponent(`Checking in: Application for ${app.jobTitle} at ${app.company}`);
+                        const body = encodeURIComponent(`Hi there,\n\nI hope this email finds you well.\n\nI recently applied for the ${app.jobTitle} position at ${app.company} and wanted to reiterate my interest in the role. Please let me know if there's any additional information I can provide to support my application.\n\nBest regards,\n[Your Name]`);
+                        window.open(`mailto:${app.companyEmail}?subject=${subject}&body=${body}`, "_blank");
+                      }}
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      <span>Draft Follow-up</span>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={() => onArchive(app.id, !app.archived)}>
                     {app.archived ? "Unarchive" : "Archive"}
                   </DropdownMenuItem>

@@ -8,7 +8,7 @@ import type {
 } from "@/types/job";
 import { EMPLOYMENT_TYPES, JOB_SOURCES, STATUS_CONFIG, WORK_LOCATIONS } from "@/types/job";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Mail, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { StatusBadge } from "./StatusBadge";
 
@@ -97,19 +97,26 @@ function SalaryInput({
 
 // ── Smart defaults ─────────────────────────────────────────────────────────────
 
-const defaultForm = (): Omit<JobApplication, "id" | "dateUpdated"> => ({
-  jobTitle: "",
-  company: "",
-  status: "applied",
-  dateApplied: new Date().toISOString().split("T")[0],
-  priority: 3 as Priority,
-  archived: false,
-  jobSource: "linkedin",
-  employmentType: "full-time",
-  workLocation: "remote",
-  salaryMin: 800000,
-  salaryMax: 1300000,
-});
+const defaultForm = (): Omit<JobApplication, "id" | "dateUpdated"> => {
+  const today = new Date();
+  const nextWeek = new Date(today);
+  nextWeek.setDate(today.getDate() + 7);
+
+  return {
+    jobTitle: "",
+    company: "",
+    status: "applied",
+    dateApplied: today.toISOString().split("T")[0],
+    followUpDate: nextWeek.toISOString().split("T")[0],
+    priority: 3 as Priority,
+    archived: false,
+    jobSource: "linkedin",
+    employmentType: "full-time",
+    workLocation: "remote",
+    salaryMin: 800000,
+    salaryMax: 1300000,
+  };
+};
 
 // ── Section label ──────────────────────────────────────────────────────────────
 
@@ -162,6 +169,13 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
   const labelClass = "block text-[11px] font-medium text-muted-foreground/70 mb-1.5";
   const selectClass = `${inputClass} appearance-none cursor-pointer`;
 
+  const handleDraftEmail = () => {
+    if (!form.companyEmail) return;
+    const subject = encodeURIComponent(`Checking in: Application for ${form.jobTitle} at ${form.company}`);
+    const body = encodeURIComponent(`Hi there,\n\nI hope this email finds you well.\n\nI recently applied for the ${form.jobTitle} position at ${form.company} and wanted to reiterate my interest in the role. Please let me know if there's any additional information I can provide to support my application.\n\nBest regards,\n[Your Name]`);
+    window.open(`mailto:${form.companyEmail}?subject=${subject}&body=${body}`, "_blank");
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -196,12 +210,23 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
                   </p>
                 )}
               </div>
-              <button
-                onClick={onClose}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-white/8 hover:text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                {isEdit && form.companyEmail && (
+                  <button
+                    onClick={handleDraftEmail}
+                    title="Draft Follow-up Email"
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-primary transition-colors hover:bg-primary/10"
+                  >
+                    <Mail className="h-4 w-4" />
+                  </button>
+                )}
+                <button
+                  onClick={onClose}
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-white/8 hover:text-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
             </div>
 
             {/* Scrollable form */}
@@ -236,15 +261,27 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
                       </div>
                     </div>
 
-                    <div>
-                      <label className={labelClass}>Job Posting URL</label>
-                      <input
-                        className={inputClass}
-                        value={form.jobPostingUrl ?? ""}
-                        onChange={(e) => set("jobPostingUrl", e.target.value || undefined)}
-                        placeholder="https://..."
-                        type="url"
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className={labelClass}>Job Posting URL</label>
+                        <input
+                          className={inputClass}
+                          value={form.jobPostingUrl ?? ""}
+                          onChange={(e) => set("jobPostingUrl", e.target.value || undefined)}
+                          placeholder="https://..."
+                          type="url"
+                        />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Company/Recruiter Email</label>
+                        <input
+                          className={inputClass}
+                          value={form.companyEmail ?? ""}
+                          onChange={(e) => set("companyEmail", e.target.value || undefined)}
+                          placeholder="hr@company.com"
+                          type="email"
+                        />
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
