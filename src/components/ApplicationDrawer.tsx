@@ -212,7 +212,7 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
                 <section className="rounded-xl border border-border/50 bg-background/50 p-4">
                   <SectionLabel>Role Details</SectionLabel>
                   <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className={labelClass}>Job Title *</label>
                         <input
@@ -247,7 +247,7 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
                       />
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
                         <label className={labelClass}>Source</label>
                         <select
@@ -325,7 +325,7 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className={labelClass}>Date Applied</label>
                         <input
@@ -371,7 +371,7 @@ export function ApplicationDrawer({ open, onClose, application, onSave, onUpdate
                 {/* ── Compensation (₹ Indian) ── */}
                 <section className="rounded-xl border border-border/50 bg-background/50 p-4">
                   <SectionLabel>Compensation (₹ per annum)</SectionLabel>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <label className={labelClass}>Min Salary</label>
                       <SalaryInput

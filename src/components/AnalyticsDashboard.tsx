@@ -166,7 +166,7 @@ export function AnalyticsDashboard({ applications, onClose }: AnalyticsDashboard
 
       <div className="space-y-5 px-5 py-5">
         {/* Stat Cards */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {statCards.map((s, i) => (
             <motion.div
               key={s.label}
@@ -183,7 +183,7 @@ export function AnalyticsDashboard({ applications, onClose }: AnalyticsDashboard
         </div>
 
         {/* Charts Row 1 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Pipeline Funnel */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -232,7 +232,7 @@ export function AnalyticsDashboard({ applications, onClose }: AnalyticsDashboard
           >
             <p className={`${labelClass} mb-4`}>Application Sources</p>
             {sourceData.length > 0 ? (
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
                 <ResponsiveContainer width="50%" height={200}>
                   <PieChart>
                     <Pie
@@ -267,7 +267,7 @@ export function AnalyticsDashboard({ applications, onClose }: AnalyticsDashboard
         </div>
 
         {/* Charts Row 2 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Weekly Activity */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}

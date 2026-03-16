@@ -95,7 +95,7 @@ export function JobTable({ applications, onSelect, onDelete, onArchive }: JobTab
   return (
     <div className="flex-1 overflow-auto">
       {/* Header */}
-      <div className="sticky top-0 z-10 grid grid-cols-[1fr_130px_84px_110px_90px_40px] items-center border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 grid grid-cols-[1fr_130px_84px_110px_90px_40px] items-center border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur-sm min-w-[800px]">
         {HEADERS.map((h) => (
           <span key={h} className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/50">
             {h}
@@ -115,7 +115,7 @@ export function JobTable({ applications, onSelect, onDelete, onArchive }: JobTab
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1], delay: i * 0.02 }}
             onClick={() => onSelect(app)}
-            className="group grid cursor-pointer grid-cols-[1fr_130px_84px_110px_90px_40px] items-center border-b border-border/40 px-6 py-3 transition-all duration-100 hover:bg-white/[0.025]"
+            className="group grid cursor-pointer grid-cols-[1fr_130px_84px_110px_90px_40px] items-center border-b border-border/40 px-6 py-3 transition-all duration-100 hover:bg-white/[0.025] min-w-[800px]"
           >
             {/* Company + role */}
             <div className="flex items-center gap-3 overflow-hidden pr-4">

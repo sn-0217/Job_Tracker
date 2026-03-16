@@ -71,7 +71,7 @@ export function TopNav({
   return (
     <header className="flex flex-col border-b border-border bg-card/60 backdrop-blur-md z-30 sticky top-0">
       {/* Top row: logo | search | actions */}
-      <div className="flex h-14 items-center gap-4 px-6">
+      <div className="flex sm:h-14 flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-0">
         {/* Logo */}
         <div className="flex items-center gap-2.5 shrink-0">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/20">
@@ -97,7 +97,7 @@ export function TopNav({
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/50" />
           <input
-            className="h-9 w-64 rounded-xl border border-border bg-muted/40 pl-9 pr-4 text-[13px] text-foreground placeholder:text-muted-foreground/40 transition-all focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 focus:w-72"
+            className="h-9 w-full sm:w-64 max-w-[200px] sm:max-w-none rounded-xl border border-border bg-muted/40 pl-9 pr-4 text-[13px] text-foreground placeholder:text-muted-foreground/40 transition-all focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 sm:focus:w-72"
             placeholder="Search roles, companies..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -124,7 +124,7 @@ export function TopNav({
       </div>
 
       {/* Tab row */}
-      <div className="flex items-center gap-0.5 px-5 pb-0">
+      <div className="flex items-center gap-0.5 px-3 sm:px-5 pb-0 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.key;
           const isAnalytics = tab.key === "__analytics__";
@@ -133,7 +133,7 @@ export function TopNav({
             <button
               key={tab.key}
               onClick={() => handleTab(tab.key)}
-              className={`relative flex items-center gap-1.5 rounded-t-lg px-3.5 py-2.5 text-[13px] font-medium transition-all duration-150 ${
+              className={`relative flex items-center gap-1.5 rounded-t-lg px-3.5 py-2.5 text-[13px] font-medium transition-all duration-150 whitespace-nowrap shrink-0 ${
                 isActive
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground"
