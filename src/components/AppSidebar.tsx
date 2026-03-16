@@ -29,6 +29,8 @@ export function AppSidebar({
   setStatusFilter,
   showArchived,
   setShowArchived,
+  showAnalytics,
+  onShowAnalytics,
   stats,
 }: SidebarProps) {
   const counts: Record<string, number> = {
