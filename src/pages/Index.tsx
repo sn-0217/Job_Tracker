@@ -1,12 +1,78 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useCallback, useEffect } from "react";
+import { AppSidebar } from "@/components/AppSidebar";
+import { TopBar } from "@/components/TopBar";
+import { JobTable } from "@/components/JobTable";
+import { ApplicationDrawer } from "@/components/ApplicationDrawer";
+import { useJobStore } from "@/store/useJobStore";
+import type { JobApplication } from "@/types/job";
 
 const Index = () => {
+  const store = useJobStore();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [editingApp, setEditingApp] = useState<JobApplication | null>(null);
+
+  const handleAddNew = useCallback(() => {
+    setEditingApp(null);
+    setDrawerOpen(true);
+  }, []);
+
+  const handleSelect = useCallback((app: JobApplication) => {
+    setEditingApp(app);
+    setDrawerOpen(true);
+  }, []);
+
+  const handleArchive = useCallback(
+    (id: string, archived: boolean) => {
+      store.updateApplication(id, { archived });
+    },
+    [store]
+  );
+
+  // Keyboard shortcut: Cmd+N to add new
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "n") {
+        e.preventDefault();
+        handleAddNew();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleAddNew]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="flex h-screen overflow-hidden bg-background">
+      <AppSidebar
+        statusFilter={store.statusFilter}
+        setStatusFilter={store.setStatusFilter}
+        showArchived={store.showArchived}
+        setShowArchived={store.setShowArchived}
+        stats={store.stats}
+      />
+
+      <main className="flex flex-1 flex-col overflow-hidden">
+        <TopBar
+          searchQuery={store.searchQuery}
+          setSearchQuery={store.setSearchQuery}
+          onAddNew={handleAddNew}
+          followUpsDue={store.stats.followUpsDue}
+        />
+
+        <JobTable
+          applications={store.applications}
+          onSelect={handleSelect}
+          onDelete={store.deleteApplication}
+          onArchive={handleArchive}
+        />
+      </main>
+
+      <ApplicationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        application={editingApp}
+        onSave={store.addApplication}
+        onUpdate={store.updateApplication}
+      />
     </div>
   );
 };
