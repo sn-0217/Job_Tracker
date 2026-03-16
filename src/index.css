@@ -117,4 +117,13 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Hide scrollbar but allow scrolling */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
