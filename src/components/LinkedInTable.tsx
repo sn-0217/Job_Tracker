@@ -8,7 +8,7 @@ import {
 import type { LinkedInPost } from "@/types/linkedinPost";
 import { isPast, parseISO } from "date-fns";
 import { motion } from "framer-motion";
-import { Building2, ExternalLink, Linkedin, MoreHorizontal, Plus } from "lucide-react";
+import { Building2, ExternalLink, Linkedin, Mail, MoreHorizontal, Plus } from "lucide-react";
 
 interface LinkedInTableProps {
   posts: LinkedInPost[];
@@ -81,7 +81,7 @@ export function LinkedInTable({
   return (
     <div className="flex-1 overflow-auto">
       {/* Header */}
-      <div className="sticky top-0 z-10 grid grid-cols-[1fr_160px_120px_90px_40px] items-center border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur-sm min-w-[700px]">
+      <div className="sticky top-0 z-10 grid grid-cols-[1fr_1.5fr_120px_90px_40px] items-center border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur-sm min-w-[700px]">
         {["Poster / Company", "Context", "Post", "Follow-up", ""].map((h) => (
           <span key={h} className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/50">
             {h}
@@ -100,8 +100,12 @@ export function LinkedInTable({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1], delay: i * 0.02 }}
             onClick={() => onSelect(p)}
-            className={`group grid cursor-pointer grid-cols-[1fr_160px_120px_90px_40px] items-center border-b border-border/40 px-6 py-3 transition-all duration-100 hover:bg-white/[0.025] min-w-[700px] ${
-              p.done ? "opacity-40" : ""
+            className={`group grid cursor-pointer grid-cols-[1fr_1.5fr_120px_90px_40px] items-start border-b px-6 py-3 transition-all duration-100 min-w-[700px] ${
+              p.done 
+                ? "opacity-40 border-border/40" 
+                : isOverdue
+                  ? "bg-amber-500/[0.03] hover:bg-amber-500/[0.08] border-border/40 shadow-[inset_2px_0_0_#f59e0b]"
+                  : "border-border/40 hover:bg-white/[0.025]"
             }`}
           >
             {/* Poster + company */}
@@ -121,18 +125,26 @@ export function LinkedInTable({
                     <p className="truncate text-[12px] text-muted-foreground">{p.company}</p>
                   </div>
                 )}
+                {p.email && (
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <Mail className="h-2.5 w-2.5 text-muted-foreground/40" />
+                    <a href={`mailto:${p.email}`} onClick={(e) => e.stopPropagation()} className="truncate text-[11px] text-muted-foreground/80 hover:text-primary transition-colors">
+                      {p.email}
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Context */}
-            <p className="truncate text-[12px] text-muted-foreground pr-2">
+            <p className="line-clamp-2 text-[12px] text-muted-foreground pr-4 leading-relaxed mt-0.5">
               {p.context || <span className="text-muted-foreground/25">—</span>}
             </p>
 
             {/* Post link */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-1.5 mt-0.5"
             >
               <a
                 href={p.postUrl}
@@ -146,7 +158,7 @@ export function LinkedInTable({
             </div>
 
             {/* Follow-up */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 mt-0.5">
               {isOverdue && (
                 <div
                   title="Follow-up overdue"
@@ -159,7 +171,7 @@ export function LinkedInTable({
             </div>
 
             {/* Actions */}
-            <div onClick={(e) => e.stopPropagation()}>
+            <div onClick={(e) => e.stopPropagation()} className="mt-0.5">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-all hover:bg-white/8 hover:text-foreground group-hover:opacity-100">

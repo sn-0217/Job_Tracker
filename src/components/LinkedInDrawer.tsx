@@ -2,6 +2,7 @@ import type { LinkedInPost } from "@/types/linkedinPost";
 import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { parseEmailData } from "@/lib/emailParser";
 
 interface LinkedInDrawerProps {
   open: boolean;
@@ -21,6 +22,7 @@ const defaultForm = (): Omit<LinkedInPost, "id" | "createdAt"> => ({
   postUrl: "",
   posterName: "",
   company: "",
+  email: "",
   context: "",
   notes: "",
   followUpDate: plusDays(3),
@@ -51,6 +53,7 @@ export function LinkedInDrawer({
         postUrl: post.postUrl,
         posterName: post.posterName ?? "",
         company: post.company ?? "",
+        email: post.email ?? "",
         context: post.context ?? "",
         notes: post.notes ?? "",
         followUpDate: post.followUpDate?.split("T")[0] ?? plusDays(3),
@@ -64,6 +67,19 @@ export function LinkedInDrawer({
   const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  const handleEmailBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (!val) return;
+    const parsed = parseEmailData(val);
+    if (!parsed) return;
+    
+    setForm((prev) => ({
+      ...prev,
+      posterName: prev.posterName || parsed.name,
+      company: prev.company || parsed.company,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.postUrl) return;
@@ -71,6 +87,7 @@ export function LinkedInDrawer({
       ...form,
       posterName: form.posterName || undefined,
       company: form.company || undefined,
+      email: form.email || undefined,
       context: form.context || undefined,
       notes: form.notes || undefined,
       followUpDate: form.followUpDate || undefined,
@@ -183,6 +200,17 @@ export function LinkedInDrawer({
                           placeholder="Google"
                         />
                       </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>Email Address</label>
+                      <input
+                        type="email"
+                        className={inputClass}
+                        value={form.email ?? ""}
+                        onChange={(e) => set("email", e.target.value)}
+                        onBlur={handleEmailBlur}
+                        placeholder="john@example.com"
+                      />
                     </div>
                     <div>
                       <label className={labelClass}>Why is this relevant?</label>
