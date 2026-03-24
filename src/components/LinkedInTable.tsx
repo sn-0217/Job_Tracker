@@ -8,7 +8,7 @@ import {
 import type { LinkedInPost } from "@/types/linkedinPost";
 import { isPast, parseISO } from "date-fns";
 import { motion } from "framer-motion";
-import { Building2, ExternalLink, Linkedin, MoreHorizontal, Plus } from "lucide-react";
+import { Building2, ExternalLink, Linkedin, Mail, MoreHorizontal, Plus } from "lucide-react";
 
 interface LinkedInTableProps {
   posts: LinkedInPost[];
@@ -119,6 +119,14 @@ export function LinkedInTable({
                   <div className="flex items-center gap-1">
                     <Building2 className="h-2.5 w-2.5 text-muted-foreground/40" />
                     <p className="truncate text-[12px] text-muted-foreground">{p.company}</p>
+                  </div>
+                )}
+                {p.email && (
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <Mail className="h-2.5 w-2.5 text-muted-foreground/40" />
+                    <a href={`mailto:${p.email}`} onClick={(e) => e.stopPropagation()} className="truncate text-[11px] text-muted-foreground/80 hover:text-primary transition-colors">
+                      {p.email}
+                    </a>
                   </div>
                 )}
               </div>

@@ -10,6 +10,7 @@ function fromDb(d: any): LinkedInPost {
     postUrl: d.post_url,
     posterName: d.poster_name ?? undefined,
     company: d.company ?? undefined,
+    email: d.email ?? undefined,
     context: d.context ?? undefined,
     notes: d.notes ?? undefined,
     followUpDate: d.follow_up_date ?? undefined,
@@ -23,6 +24,7 @@ function toDb(p: Partial<LinkedInPost>) {
   if (p.postUrl !== undefined)      r.post_url       = p.postUrl;
   if (p.posterName !== undefined)   r.poster_name    = p.posterName;
   if (p.company !== undefined)      r.company        = p.company;
+  if (p.email !== undefined)        r.email          = p.email;
   if (p.context !== undefined)      r.context        = p.context;
   if (p.notes !== undefined)        r.notes          = p.notes;
   if (p.followUpDate !== undefined) r.follow_up_date = p.followUpDate;
